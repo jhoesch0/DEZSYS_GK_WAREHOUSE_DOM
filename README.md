@@ -91,6 +91,7 @@ Die Daten werden in der Zentrale in einem MongoDB Repository gespeichert und kö
     * Implementieren Sie eine kleine Applikation, dass die Daten generiert und über das REST-Interfaces dieser Übung abspeichert.
       Dabei werden sowohl Produkte, als auch Lagerstandorte abgelegt.
 *   Erweiterte Anforderungen **"Vertiefung"**
+    * Generieren Testdaten für das Berichtswesen: mind. 300 Produkte in 6 Produktkategorien, 5 Warenhaeuser   
     * Formulierung 3 sinnvoller Fragestellungen für das Berichtswesen in der Zentrale und deren Abfragen in einer Mongo Shell.
       Beispiel:
       Wie ist der Lagerbestand von einem Produkt X über alle Lagerstandorte?
