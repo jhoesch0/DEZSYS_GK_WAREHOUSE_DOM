@@ -26,12 +26,13 @@ Das Ziel dieser Übung ist die Implementierung einer dokumentenorientierten Midd
 
 Implementieren Sie eine dokumentenorientierte Middleware mit Hilfe von MongoDB, dass Daten über eine REST Schnittstellen empfängt und die Daten des Lagerstandortes in einer MongoDB Datenbank im JSON Format abspeichert. Entwerfen Sie eine geeignet Datenstruktur, um eine kontinuierliche Speicherung der Daten zu gewährleisten.
 
-Es sollen dabei folgende REST-Funktionen implementiert werden:   
+Es sollen dabei folgende REST-Funktionen implementiert werden:  
 
-* POST /warehouse: fügt einen neuen Lagerstandort hinzu  
+* POST /warehouse: fügt einen neuen Lagerstandort hinzu. 
 * GET /warehouse: abrufen aller Lagerstandorte und deren Lagerbestand  
 * GET /warehouse/{id}: abrufen eines Lagerstandortes id und dessen Lagerbestand  
 * DELETE /warehouse/{id}: löschen eines Lagerstandortes id   
+
 * POST /product: fügt ein neues Produkt und dessen Lagerbestand zu einem Lagerstandort hinzu
 * GET /product: abrufen aller Produkte/Lagerbestand und deren Lagerstandort
 * GET /product/{id}: abrufen eines Produktes id und dessen Lagerstandorte
@@ -53,16 +54,16 @@ Die Daten werden in der Zentrale in einem MongoDB Repository gespeichert und kö
   `docker exec -it mongo bash`  
   `mongosh`  
 
-* Execute MongoShell Commands
-  `show dbs`
-  `use local`
-  `db.startup_log.count();`  
+* Execute MongoShell Commands    
+  `show dbs`  
+  `use local`.  
+  `db.startup_log.countDocuments();`    
 
 * Accessing Data with MongoDB and Spring  
-  - Build and Run Exmample  
+  - Build and Run Example  
 	  `gradle clean bootRun`  
 
-  - Check Data in MongoDB   
+  - Check Data in MongoDB.  
     `docker exec -it mongo bash`
     `mongosh`
     `use test`
@@ -90,12 +91,11 @@ Die Daten werden in der Zentrale in einem MongoDB Repository gespeichert und kö
     * Implementieren Sie eine kleine Applikation, dass die Daten generiert und über das REST-Interfaces dieser Übung abspeichert.
       Dabei werden sowohl Produkte, als auch Lagerstandorte abgelegt.
 *   Erweiterte Anforderungen **"Vertiefung"**
-    * Formulierung 3 sinnvoller Fragestellungen für einen Anwendungsfall in der Zentrale und deren Abfragen in einer Mongo Shell.
+    * Formulierung 3 sinnvoller Fragestellungen für das Berichtswesen in der Zentrale und deren Abfragen in einer Mongo Shell.
       Beispiel:
       Wie ist der Lagerbestand von einem Produkt X über alle Lagerstandorte?
       Welche Produkte haben einen Lagerbestand von unter 10 Stück über alle Lagerstandorte?
-    * Implementieren Sie eine Schnittstelle zu einer AI Instanz (lokal Ollama, cloud-basiert Gemini), um die Daten zu übertragen und lassen Sie sich zu den  Fragestellungen einen Bericht / Grafik von der AI entwerfen. Dokumentieren Sie hier die Anfragen, die Ihre Applikation an die AI Instanz sendet.
-
+    * Implementieren Sie eine Schnittstelle zu einer AI Instanz (lokal Ollama, cloud-basiert Gemini), um die Daten zu übertragen und lassen Sie sich zu den 3 Fragestellungen einen Bericht / Grafik von der AI entwerfen. Dokumentieren Sie hier die Anfragen, die Ihre Applikation an die AI Instanz sendet.
 
 ## 1.6 Fragestellung für Protokoll
 
@@ -109,6 +109,7 @@ Die Daten werden in der Zentrale in einem MongoDB Repository gespeichert und kö
 + Mit welchem Befehl koennen Sie den Lagerstand eines Produktes eines bestimmten Lagerstandortes anzeigen.
 
 ## 1.7 Links und Dokumente
+* [Was bedeutet NoSQL](https://www.oracle.com/at/database/nosql/what-is-nosql)
 * [Accessing Data with MongoDB](https://spring.io/guides/gs/accessing-data-mongodb/)
 * [MongoDB Installation](https://docs.mongodb.com/manual/administration/install-community/)
 * [mongo Shell Quick Reference](https://docs.mongodb.com/manual/reference/mongo-shell/)
