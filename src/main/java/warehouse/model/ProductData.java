@@ -1,14 +1,13 @@
 package warehouse.model;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "products")
 public class ProductData {
 
-    @Id
-	private String ID;
+	@Id
+	private String id;
 
 	private String warehouseID;
 	private String productID;
@@ -16,9 +15,6 @@ public class ProductData {
 	private String productCategory;
 	private double productQuantity;
 
-	/**
-	 * Constructor
-	 */
 	public ProductData() {
 	}
 
@@ -31,12 +27,12 @@ public class ProductData {
 		this.productQuantity = productQuantity;
 	}
 
-	public String getID() {
-		return ID;
+	public String getId() {
+		return id;
 	}
 
-	public void setID(String ID) {
-		this.ID = ID;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getWarehouseID() {
@@ -79,9 +75,6 @@ public class ProductData {
 		this.productQuantity = productQuantity;
 	}
 
-	/**
-	 * Methods
-	 */
 	@Override
 	public String toString() {
 		String info = String.format("Product Info: WarehouseID = %s, ProductID = %s, ProductName = %s, ProductCategory = %s, ProductQuantity = %4.1f",

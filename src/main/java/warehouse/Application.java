@@ -1,66 +1,75 @@
 package warehouse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import org.springframework.context.event.EventListener;
+import org.springframework.web.client.RestTemplate;
 import warehouse.model.ProductData;
-import warehouse.repository.WarehouseRepository;
+import warehouse.model.WarehouseData;
+
+import java.util.Random;
 
 @SpringBootApplication
-public class Application implements CommandLineRunner {
+public class Application {
 
-	@Autowired
-	private WarehouseRepository repository;
+	@Value("${server.port:8080}")
+	private int serverPort;
+
+	private final RestTemplate restTemplate = new RestTemplate();
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
+	@EventListener(ApplicationReadyEvent.class)
+	public void seed() {
+		String baseUrl = "http://localhost:" + serverPort;
 
-		// Initialize product data repository
-		repository.deleteAll();
-
-		// save a couple of product data
-		repository.save(new ProductData("1","00-443175","Bio Orangensaft Sonne","Getraenk", 2500));
-		repository.save(new ProductData("1","00-871895","Bio Apfelsaft Gold","Getraenk", 3420));
-		repository.save(new ProductData("1","01-926885","Ariel Waschmittel Color","Waschmittel", 478));
-		repository.save(new ProductData("1","02-234811","Mampfi Katzenfutter Rind","Tierfutter", 1324));
-		repository.save(new ProductData("2","03-893173","Saugstauberbeutel Ingres","Reinigung", 7390));
-		System.out.println();
-
-		// fetch all products
-		System.out.println("ProductData found with findAll():");
-		System.out.println("-------------------------------");
-		for (ProductData productdata : repository.findAll()) {
-			System.out.println(productdata);
-		}
-		System.out.println();
-
-		// Fetch single product
-		System.out.println("Record(s) found with ProductID(\"00-871895\"):");
-		System.out.println("--------------------------------");
-		System.out.println(repository.findByProductID("00-871895"));
-		System.out.println();
-
-		// Fetch all products of Warehouse 1
-		System.out.println("Record(s) found with findByWarehouseID(\"1\"):");
-		System.out.println("--------------------------------");
-		for (ProductData productdata : repository.findByWarehouseID("1")) {
-			System.out.println(productdata);
-		}
-		System.out.println();
-
-		// Fetch all products of Warehouse 2
-		System.out.println("Record(s) found with findByWarehouseID(\"2\"):");
-		System.out.println("--------------------------------");
-		for (ProductData productdata : repository.findByWarehouseID("2")) {
-			System.out.println(productdata);
+		WarehouseData[] existing = restTemplate.getForObject(baseUrl + "/warehouse", WarehouseData[].class);
+		if (existing != null) {
+			for (WarehouseData w : existing) {
+				if (w != null && w.getWarehouseID() != null) {
+					restTemplate.delete(baseUrl + "/warehouse/" + w.getWarehouseID());
+				}
+			}
 		}
 
+		String[] warehouseIDs = {"1", "2", "3", "4", "5"};
+		String[] names = {"Linz Bahnhof", "Salzburg Hbf", "Graz Hbf", "Innsbruck West", "Wien Mitte"};
+		int[] postalCodes = {4010, 5020, 8010, 6020, 1030};
+		String[] cities = {"Linz", "Salzburg", "Graz", "Innsbruck", "Wien"};
+
+		for (int i = 0; i < warehouseIDs.length; i++) {
+			WarehouseData w = new WarehouseData();
+			w.setId(warehouseIDs[i]);
+			w.setWarehouseID(warehouseIDs[i]);
+			w.setWarehouseName(names[i]);
+			w.setTimestamp("2022-01-02 01:00:00");
+			w.setWarehousePostalCode(postalCodes[i]);
+			w.setWarehouseCity(cities[i]);
+			w.setWarehouseCountrz("Austria");
+			restTemplate.postForEntity(baseUrl + "/warehouse", w, WarehouseData.class);
+		}
+
+		String[] categories = {"Getraenk", "Waschmittel", "Tierfutter", "Reinigung", "Lebensmittel", "Elektronik"};
+		int productCount = 300;
+		Random rand = new Random(42);
+
+		for (int i = 1; i <= productCount; i++) {
+			String warehouseID = warehouseIDs[(i - 1) % warehouseIDs.length];
+			String category = categories[(i - 1) % categories.length];
+
+			ProductData p = new ProductData();
+			p.setWarehouseID(warehouseID);
+			p.setProductID(String.format("P%04d", i));
+			p.setProductName(category + " Produkt " + i);
+			p.setProductCategory(category);
+			p.setProductQuantity(10 + rand.nextInt(10000));
+
+			restTemplate.postForEntity(baseUrl + "/product", p, ProductData.class);
+		}
 	}
 
 }

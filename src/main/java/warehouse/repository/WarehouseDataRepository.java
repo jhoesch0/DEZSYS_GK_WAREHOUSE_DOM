@@ -5,7 +5,8 @@ import warehouse.model.WarehouseData;
 
 import java.util.Optional;
 
-public interface WarehouseRepository extends MongoRepository<WarehouseData, String> {
+public interface WarehouseDataRepository extends MongoRepository<WarehouseData, String> {
     Optional<WarehouseData> findByWarehouseID(String warehouseID);
     void deleteByWarehouseID(String warehouseID);
 }
+
